@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const TodoItem = (props) => {
-  const { name, isActive, id } = props.todo;
+  const { name, isActive, id, priority} = props.todo;
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
 
@@ -30,7 +30,10 @@ const TodoItem = (props) => {
             onBlur={handleEdit}
           />
         ) : (
+          <>
           <span className={isActive ? '' : 'line-through'}>{name}</span>
+          <span style={{paddingLeft:"2rem",fontSize:"14px"}}>{priority}</span>
+          </>
         )}
       </div>
       <div className="buttons-group my-2">

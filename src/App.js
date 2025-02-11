@@ -10,6 +10,7 @@ function App() {
 
   const [todos, setTodos] = useState([]);
   const [filterItem, setFilterItem] = useState([]);
+  const [priority,setPriority]=useState('');
 
   const [category, setCategory] = useState("all");
 
@@ -27,16 +28,19 @@ function App() {
       alert("This todo is already active.");
       return;
     }
-
-    const createTodo = {
-      name: newTodo,
-      isActive: true,
-      id: new Date().getTime() + Math.random(),
-    };
-    const newTodos = [...todos, createTodo];
-    setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
-    setNewTodo("");
+    if (newTodo && priority) {
+      const createTodo = {
+        name: newTodo,
+        isActive: true,
+        id: new Date().getTime() + Math.random(),
+        priority: parseInt(priority),
+      };
+      const newTodos=[...todos, createTodo];
+      setTodos((newTodos).sort((a, b) => b.priority - a.priority));
+      localStorage.setItem("todos", JSON.stringify(newTodos));
+      setNewTodo('');
+      setPriority('');  
+    }   
   };
   const removeTodo = (id) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
@@ -98,9 +102,18 @@ function App() {
             <input
               type="text"
               name="todo"
+              placeholder="Enter Task"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               className="form-control"
+            />
+            <input 
+                type="number" 
+                name="priority"
+                placeholder="Set The Priority"
+                value={priority} 
+                onChange={(e) => setPriority(e.target.value)} 
+                className="form-control"
             />
             <div className="input-group-append">
               <button className="btn btn-secondary" onClick={addtodo}>
