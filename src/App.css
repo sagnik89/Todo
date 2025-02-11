@@ -37,9 +37,7 @@
   }
 }
 
-
 body {
-  
   background-size: cover;
   font-family: cursive;
   font-size: 18px;
@@ -62,4 +60,3 @@ span {
 .btn-md {
   cursor: pointer !important;
 }
-
