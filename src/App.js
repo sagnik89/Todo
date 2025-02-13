@@ -10,6 +10,8 @@ function App() {
 
   const [todos, setTodos] = useState([]);
   const [filterItem, setFilterItem] = useState([]);
+  const [priority,setPriority]=useState('');
+  const[error,setError]=useState('');
 
   const [category, setCategory] = useState("all");
 
@@ -18,7 +20,8 @@ function App() {
     items && setTodos(JSON.parse(items));
   }, []);
 
-  const addtodo = () => {
+  const addtodo = (req,res) => {
+    setError(false);
     const isDuplicateActiveTodo = todos.some(
       (todo) => todo.name === newTodo && todo.isActive === true
     );
@@ -27,16 +30,22 @@ function App() {
       alert("This todo is already active.");
       return;
     }
-
-    const createTodo = {
-      name: newTodo,
-      isActive: true,
-      id: new Date().getTime() + Math.random(),
-    };
-    const newTodos = [...todos, createTodo];
-    setTodos(newTodos);
-    localStorage.setItem("todos", JSON.stringify(newTodos));
-    setNewTodo("");
+    if (newTodo && priority<=100 && priority>=0) {
+      const createTodo = {
+        name: newTodo,
+        isActive: true,
+        id: new Date().getTime() + Math.random(),
+        priority: parseInt(priority),
+      };
+      const newTodos=[...todos, createTodo];
+      setTodos((newTodos).sort((a, b) => b.priority - a.priority));
+      localStorage.setItem("todos", JSON.stringify(newTodos));
+      setNewTodo('');
+      setPriority('');  
+    }   
+    else{
+      setError(true);
+    }
   };
   const removeTodo = (id) => {
     const newTodos = todos.filter((todo) => todo.id !== id);
@@ -92,15 +101,30 @@ function App() {
 
   return (
     <AuthWrapper>
+      {error?    
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Give proper values
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        </button>
+    </div>:<></>}
       <div className="col-md-4 mx-auto px-2">
         <div className="todo justify-content-center mt-5">
           <div className="input-group mb-2 mr-sm-2">
             <input
               type="text"
               name="todo"
+              placeholder="Enter Task"
               value={newTodo}
               onChange={(e) => setNewTodo(e.target.value)}
               className="form-control"
+            />
+            <input 
+                type="number" 
+                name="priority"
+                placeholder="Set The Priority only from (1 to 100)"
+                value={priority} 
+                onChange={(e) => setPriority(e.target.value)} 
+                className="form-control"
             />
             <div className="input-group-append">
               <button className="btn btn-secondary" onClick={addtodo}>
