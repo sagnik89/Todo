@@ -7,7 +7,7 @@ import { ClerkProvider } from "@clerk/clerk-react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <ClerkProvider publishableKey="pk_test_cmVsaWV2ZWQtaGVycmluZy0wLmNsZXJrLmFjY291bnRzLmRldiQ">
+  <ClerkProvider publishableKey="PUBLISHABLE_KEY">
     <App />
   </ClerkProvider>
 );
